@@ -1,0 +1,155 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id				String			@id() @default(uuid()) @map("user_id")
+  email				String			@unique
+  password			String
+  userRole			String 
+  createdAt			DateTime		@default(now()) @map("create_at")
+  updatedAt			DateTime		@updatedAt @map("update_at")
+  userInfor			User_Infor?
+  addressDeliverys	Address_Delivery[]
+  orders			Order[]
+  evaluations		Evaluation[]
+  favorites			Favorite[]
+}
+
+model Products {
+  id			Int			@id @default(autoincrement())
+  name			String
+  descriptions	String?
+  quantity		Int
+  price			Int
+  color			String
+  material		String
+  design		String
+  type			String
+  brand			String
+  mainImg		String
+  subImg		SubImage[]
+  evaluation	Evaluation[]
+  favorites		Favorite[]
+  orderDetail	OrderDetail[]
+  
+}
+
+model User_Infor{
+  user			Users		@relation(fields: [userId], references: [id])
+  userId		String		@unique
+  avatar		String?
+  firstName		String?		@map("first_name")
+  lastName		String?		@map("last_name")
+}
+
+model Address_Delivery{
+  id		Int			@id @default(autoincrement())
+  user		Users		@relation(fields: [userId], references: [id])
+  userId	String
+  province	String
+  district	String
+  commune	String
+  address 	String
+}
+
+model Order {
+  id				Int			@id @default(autoincrement())
+  user				Users		@relation(fields: [userId], references: [id])
+  userId			String
+  dateOrder			DateTime		@default(now()) @map("date_order")
+  priceOrder		Int
+  statusOrder 		String
+  orderDetail		OrderDetail[]
+}
+
+model Evaluation {
+  id				Int			@id @default(autoincrement())
+  user				Users		@relation(fields: [userId], references: [id])
+  userId			String
+  product			Products	@relation(fields: [productId], references: [id])
+  productId			Int	
+  rating			Float
+  comment			String
+  createdAt			DateTime		@default(now()) @map("create_at")
+  updatedAt			DateTime		@updatedAt @map("update_at")
+}
+
+model Favorite {
+  id				Int			@id @default(autoincrement())
+  user				Users		@relation(fields: [userId], references: [id])
+  userId			String
+  product			Products	@relation(fields: [productId], references: [id])
+  productId			Int
+}
+
+model OrderDetail {
+  id				Int			@id @default(autoincrement())
+  product			Products	@relation(fields: [productId], references: [id])
+  productId			Int
+  order				Order		@relation(fields: [orderId], references: [id])
+  orderId			Int
+}
+
+model SubImage {
+  id				Int			@id @default(autoincrement())
+  product			Products	@relation(fields: [productId], references: [id])
+  productId			Int
+  link				String
+  poisition 		Int
+}
+
+model LookupType {
+  id				Int			@id @default(autoincrement())
+  name 				String
+  createdAt			DateTime		@default(now()) @map("create_at")
+  updatedAt			DateTime		@updatedAt @map("update_at")
+  lookupDesign		LookupDesign[]
+}
+
+model LookupDesign {
+  id				Int				@id @default(autoincrement())
+  type				LookupType		@relation(fields: [typeId], references: [id])
+  typeId			Int
+  name				String
+  createdAt			DateTime		@default(now()) @map("create_at")
+  updatedAt			DateTime		@updatedAt @map("update_at")
+  lookupBrand		LookupBrand[]
+}
+
+model LookupBrand {
+  id				Int				@id @default(autoincrement())
+  design			LookupDesign	@relation(fields: [designId], references: [id])
+  designId			Int
+  name				String
+  createdAt			DateTime		@default(now()) @map("create_at")
+  updatedAt			DateTime		@updatedAt @map("update_at")
+  lookupMaterial 	LookupMaterial[]
+}
+
+model LookupMaterial {
+  id				Int				@id @default(autoincrement())
+  brand				LookupBrand		@relation(fields: [brandId], references: [id])
+  brandId			Int
+  name				String
+  createdAt			DateTime		@default(now()) @map("create_at")
+  updatedAt			DateTime		@updatedAt @map("update_at")
+  lookupColor 		LookupColor[]
+}
+
+model LookupColor {
+  id				Int				@id @default(autoincrement())
+  material			LookupMaterial	@relation(fields: [materialId], references: [id])
+  materialId		Int
+  name				String
+  createdAt			DateTime		@default(now()) @map("create_at")
+  updatedAt			DateTime		@updatedAt @map("update_at")
+}
