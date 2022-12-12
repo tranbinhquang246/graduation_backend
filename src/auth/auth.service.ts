@@ -21,7 +21,11 @@ export class AuthService {
 
   async login(data: AuthDto) {
     const dataUser = await this.usersService.findUserwithEmail(data.email);
-    const payload = { id: dataUser.id, email: dataUser.email };
+    const payload = {
+      id: dataUser.id,
+      email: dataUser.email,
+      role: dataUser.userRole,
+    };
 
     return {
       user: dataUser,

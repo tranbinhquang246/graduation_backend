@@ -8,7 +8,7 @@ import {
 import { AuthDto } from 'src/auth/dto/auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as argon2 from 'argon2';
-import { Prisma } from '@prisma/client';
+import { Prisma, Users } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -48,5 +48,17 @@ export class UsersService {
       throw new NotFoundException(`User does not exist`);
     }
     return findUser;
+  }
+
+  async findUserwithID(id: string): Promise<Users> {
+    const findUser = await this.prisma.users.findUnique({
+      where: { id: id },
+    });
+    return findUser;
+  }
+
+  async findAll(): Promise<Users[]> {
+    const findAll = await this.prisma.users.findMany();
+    return findAll;
   }
 }

@@ -20,7 +20,6 @@ export class AuthController {
   ) {}
 
   @UseInterceptors(ClassSerializerInterceptor)
-  @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Body() dto: AuthDto) {
     return this.authService.login(dto);
