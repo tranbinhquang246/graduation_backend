@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-type UserField = 'userId' | 'role';
+type UserField = 'id' | 'role' | 'email';
 
 export const User = createParamDecorator(
   (data: UserField, ctx: ExecutionContext) => {

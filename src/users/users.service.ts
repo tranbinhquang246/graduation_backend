@@ -9,6 +9,7 @@ import { AuthDto } from 'src/auth/dto/auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as argon2 from 'argon2';
 import { Prisma, Users } from '@prisma/client';
+import { UserDto } from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
@@ -60,5 +61,24 @@ export class UsersService {
   async findAll(): Promise<Users[]> {
     const findAll = await this.prisma.users.findMany();
     return findAll;
+  }
+
+  async editUser(id: string, dto: UserDto): Promise<Users> {
+    const updateUser = await this.prisma.users.update({
+      where: {
+        id: id,
+      },
+      data: dto,
+    });
+    return updateUser;
+  }
+
+  async deleteUser(id: string) {
+    const deleteUser = await this.prisma.users.delete({
+      where: {
+        id: id,
+      },
+    });
+    return deleteUser;
   }
 }

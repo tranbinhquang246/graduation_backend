@@ -36,6 +36,8 @@ model Products {
   type			String
   brand			String
   mainImg		String
+  createdAt		DateTime		@default(now()) @map("create_at")
+  updatedAt		DateTime		@updatedAt @map("update_at")
   subImg		SubImage[]
   evaluation	Evaluation[]
   favorites		Favorite[]
