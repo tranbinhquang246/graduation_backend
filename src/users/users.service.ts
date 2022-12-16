@@ -18,16 +18,17 @@ export class UsersService {
   async createUser(data: AuthDto, @Res() response) {
     const hashPassword = await argon2.hash(data.password);
     try {
-      await this.prisma.users.create({
+      const newUser = await this.prisma.users.create({
         data: {
           email: data.email,
           password: hashPassword,
           userRole: 'user',
         },
       });
-      return response
-        .status(HttpStatus.OK)
-        .send({ message: 'Create Account Susscessfully' });
+      await this.prisma.user_Infor.create({
+        data: { userId: newUser.id },
+      });
+      return response.status(HttpStatus.OK).send(newUser);
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2002') {
@@ -54,12 +55,15 @@ export class UsersService {
   async findUserwithID(id: string): Promise<Users> {
     const findUser = await this.prisma.users.findUnique({
       where: { id: id },
+      include: { userInfor: true },
     });
     return findUser;
   }
 
   async findAll(): Promise<Users[]> {
-    const findAll = await this.prisma.users.findMany();
+    const findAll = await this.prisma.users.findMany({
+      include: { userInfor: true },
+    });
     return findAll;
   }
 

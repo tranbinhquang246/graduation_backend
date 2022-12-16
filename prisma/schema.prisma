@@ -46,7 +46,7 @@ model Products {
 }
 
 model User_Infor{
-  user			Users		@relation(fields: [userId], references: [id])
+  user			Users		@relation(fields: [userId], references: [id], onDelete: Cascade)
   userId		String		@unique
   avatar		String?
   firstName		String?		@map("first_name")

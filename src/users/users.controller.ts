@@ -6,11 +6,9 @@ import {
   NotFoundException,
   Param,
   Res,
-  UseGuards,
 } from '@nestjs/common';
 import { Body, Delete, Patch, Post } from '@nestjs/common/decorators';
 import { Auth } from 'src/auth/auth.decorator';
-import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { Role } from 'src/auth/roles/role.enum';
 import { UserDto } from './dto/user.dto';
 import { User } from './users.decorator';
@@ -62,7 +60,7 @@ export class UsersController {
     if (id !== userID && role !== 'admin') {
       throw new BadRequestException(`Request Failed. Not have access`);
     }
-    const editedUser = await this.usersService.editUser(id, dto);
+    const editedUser = await this.usersService.editUser(userID, dto);
     if (!editedUser) {
       throw new BadRequestException(`Request Failed`);
     }
@@ -82,7 +80,7 @@ export class UsersController {
     if (id !== userID && role !== 'admin') {
       throw new BadRequestException(`Request Failed. Not have access`);
     }
-    const deletedUser = await this.usersService.deleteUser(id);
+    const deletedUser = await this.usersService.deleteUser(userID);
     if (!deletedUser) {
       throw new BadRequestException(`Request Failed`);
     }
