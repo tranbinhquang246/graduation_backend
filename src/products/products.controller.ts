@@ -57,25 +57,25 @@ export class ProductsController {
     @Body() updateProductDto: UpdateProductDto,
     @Res() response,
   ) {
-    const editedProduct = await this.productsService.update(
-      +id,
-      updateProductDto,
-    );
-    if (!editedProduct) {
+    try {
+      const editedProduct = await this.productsService.update(
+        +id,
+        updateProductDto,
+      );
+      return response.status(HttpStatus.OK).send(editedProduct);
+    } catch (error) {
       throw new BadRequestException(`Request Failed`);
     }
-    return response.status(HttpStatus.OK).send(editedProduct);
   }
 
   @Auth(Role.Admin)
   @Delete(':id')
   async remove(@Param('id') id: string, @Res() response) {
-    const deletedProduct = await this.productsService.remove(+id);
-    if (!deletedProduct) {
+    try {
+      const deletedProduct = await this.productsService.remove(+id);
+      return response.status(HttpStatus.OK).send(deletedProduct);
+    } catch (error) {
       throw new BadRequestException(`Request Failed`);
     }
-    return response.status(HttpStatus.OK).send(deletedProduct);
   }
-
-  //handle 500 server when access to id product notfound
 }

@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProductsModule } from './products/products.module';
 import { UserInforModule } from './user-infor/user-infor.module';
+import { AddressDeliveryModule } from './address-delivery/address-delivery.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UserInforModule } from './user-infor/user-infor.module';
     PrismaModule,
     ProductsModule,
     UserInforModule,
+    AddressDeliveryModule,
   ],
   providers: [],
 })

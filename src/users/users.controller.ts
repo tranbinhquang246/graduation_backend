@@ -7,7 +7,7 @@ import {
   Param,
   Res,
 } from '@nestjs/common';
-import { Body, Delete, Patch, Post } from '@nestjs/common/decorators';
+import { Body, Delete, Patch } from '@nestjs/common/decorators';
 import { Auth } from 'src/auth/auth.decorator';
 import { Role } from 'src/auth/roles/role.enum';
 import { UserDto } from './dto/user.dto';
@@ -60,11 +60,12 @@ export class UsersController {
     if (id !== userID && role !== 'admin') {
       throw new BadRequestException(`Request Failed. Not have access`);
     }
-    const editedUser = await this.usersService.editUser(userID, dto);
-    if (!editedUser) {
+    try {
+      const editedUser = await this.usersService.editUser(userID, dto);
+      return response.status(HttpStatus.OK).send(editedUser);
+    } catch (error) {
       throw new BadRequestException(`Request Failed`);
     }
-    return response.status(HttpStatus.OK).send(editedUser);
   }
 
   @Auth()
@@ -80,11 +81,11 @@ export class UsersController {
     if (id !== userID && role !== 'admin') {
       throw new BadRequestException(`Request Failed. Not have access`);
     }
-    const deletedUser = await this.usersService.deleteUser(userID);
-    if (!deletedUser) {
+    try {
+      const deletedUser = await this.usersService.deleteUser(userID);
+      return response.status(HttpStatus.OK).send(deletedUser);
+    } catch (error) {
       throw new BadRequestException(`Request Failed`);
     }
-    return response.status(HttpStatus.OK).send(deletedUser);
   }
 }
-//handle for delete and edit 500 error

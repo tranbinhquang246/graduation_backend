@@ -48,14 +48,14 @@ export class UserInforController {
     if (id !== userID && role !== 'admin') {
       throw new BadRequestException(`Request Failed. Not have access`);
     }
-
-    const editedUserInfor = await this.userInforService.update(
-      userID,
-      updateUserInforDto,
-    );
-    if (!editedUserInfor) {
+    try {
+      const editedUserInfor = await this.userInforService.update(
+        userID,
+        updateUserInforDto,
+      );
+      return response.status(HttpStatus.OK).send(editedUserInfor);
+    } catch (error) {
       throw new BadRequestException(`Request Failed`);
     }
-    return response.status(HttpStatus.OK).send(editedUserInfor);
   }
 }

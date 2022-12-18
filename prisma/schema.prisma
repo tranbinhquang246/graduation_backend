@@ -55,7 +55,7 @@ model User_Infor{
 
 model Address_Delivery{
   id		Int			@id @default(autoincrement())
-  user		Users		@relation(fields: [userId], references: [id])
+  user		Users		@relation(fields: [userId], references: [id], onDelete: Cascade)
   userId	String
   province	String
   district	String
