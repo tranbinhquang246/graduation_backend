@@ -24,30 +24,32 @@ export class ProductsController {
   @Auth(Role.Admin)
   @Post()
   async create(@Body() createProductDto: CreateProductDto, @Res() response) {
-    const newProdutct = await this.productsService.create(createProductDto);
-    if (!newProdutct) {
+    try {
+      const newProdutct = await this.productsService.create(createProductDto);
+      return response.status(HttpStatus.OK).send(newProdutct);
+    } catch (error) {
       throw new BadRequestException(`Request Failed`);
     }
-    return response.status(HttpStatus.OK).send(newProdutct);
   }
 
   @Get('all')
   async findAll(@Res() response) {
-    const findAll = await this.productsService.findAll();
-    if (!findAll) {
+    try {
+      const findAll = await this.productsService.findAll();
+      return response.status(HttpStatus.OK).send(findAll);
+    } catch (error) {
       throw new NotFoundException(`No product found`);
     }
-
-    return response.status(HttpStatus.OK).send(findAll);
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string, @Res() response) {
-    const findProduct = await this.productsService.findOne(+id);
-    if (!findProduct) {
+    try {
+      const findProduct = await this.productsService.findOne(+id);
+      return response.status(HttpStatus.OK).send(findProduct);
+    } catch (error) {
       throw new NotFoundException(`Product not found`);
     }
-    return response.status(HttpStatus.OK).send(findProduct);
   }
 
   @Auth(Role.Admin)

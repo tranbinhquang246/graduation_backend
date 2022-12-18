@@ -43,11 +43,12 @@ export class AddressDeliveryController {
   @Auth()
   @Get()
   async findAll(@Res() response, @User('id') id: string) {
-    const allAddress = await this.addressDeliveryService.findAll(id);
-    if (!allAddress) {
-      throw new NotFoundException(`Product not found`);
+    try {
+      const allAddress = await this.addressDeliveryService.findAll(id);
+      return response.status(HttpStatus.OK).send(allAddress);
+    } catch (error) {
+      throw new NotFoundException(`Address Delivery not found`);
     }
-    return response.status(HttpStatus.OK).send(allAddress);
   }
 
   @Auth()
@@ -57,12 +58,12 @@ export class AddressDeliveryController {
     @Res() response,
     @User('id') userId: string,
   ) {
-    const address = await this.addressDeliveryService.findOne(userId, +id);
-
-    if (!address) {
-      throw new NotFoundException(`Product not found`);
+    try {
+      const address = await this.addressDeliveryService.findOne(userId, +id);
+      return response.status(HttpStatus.OK).send(address);
+    } catch (error) {
+      throw new NotFoundException(`Address Delivery not found`);
     }
-    return response.status(HttpStatus.OK).send(address);
   }
 
   @Auth()

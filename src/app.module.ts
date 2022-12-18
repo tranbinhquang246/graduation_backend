@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ProductsModule } from './products/products.module';
 import { UserInforModule } from './user-infor/user-infor.module';
 import { AddressDeliveryModule } from './address-delivery/address-delivery.module';
+import { EvaluationModule } from './evaluation/evaluation.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AddressDeliveryModule } from './address-delivery/address-delivery.modul
     ProductsModule,
     UserInforModule,
     AddressDeliveryModule,
+    EvaluationModule,
   ],
   providers: [],
 })
