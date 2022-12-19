@@ -1,4 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  Res,
+} from '@nestjs/common';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -7,7 +13,17 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class EvaluationService {
   constructor(private prisma: PrismaService) {}
 
-  async create(userId: string, createEvaluationDto: CreateEvaluationDto) {
+  async create(
+    userId: string,
+    createEvaluationDto: CreateEvaluationDto,
+    @Res() response,
+  ) {
+    const findEvaluation = await this.prisma.evaluation.findMany({
+      where: { userId: userId, productId: createEvaluationDto.productId },
+    });
+    if (findEvaluation.length !== 0) {
+      return response.status(HttpStatus.BAD_REQUEST).send(findEvaluation);
+    }
     const newEvaluation = await this.prisma.evaluation.create({
       data: {
         userId: userId,
@@ -74,3 +90,5 @@ export class EvaluationService {
     return deleteEvaluation;
   }
 }
+
+//one account only has one comment, count comment

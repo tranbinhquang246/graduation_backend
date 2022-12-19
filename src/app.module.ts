@@ -7,6 +7,7 @@ import { ProductsModule } from './products/products.module';
 import { UserInforModule } from './user-infor/user-infor.module';
 import { AddressDeliveryModule } from './address-delivery/address-delivery.module';
 import { EvaluationModule } from './evaluation/evaluation.module';
+import { FavoriteModule } from './favorite/favorite.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { EvaluationModule } from './evaluation/evaluation.module';
     UserInforModule,
     AddressDeliveryModule,
     EvaluationModule,
+    FavoriteModule,
   ],
   providers: [],
 })

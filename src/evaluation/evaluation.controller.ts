@@ -32,6 +32,7 @@ export class EvaluationController {
       const newEvaluation = await this.evaluationService.create(
         id,
         createEvaluationDto,
+        response,
       );
       return response.status(HttpStatus.OK).send(newEvaluation);
     } catch (error) {
