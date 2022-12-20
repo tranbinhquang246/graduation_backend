@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateFavoriteDto } from './dto/create-favorite.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -11,7 +11,7 @@ export class FavoriteService {
       where: { userId: userId, productId: createFavoriteDto.productId },
     });
     if (findFavorite.length !== 0) {
-      throw new ConflictException(`Available`);
+      throw new BadRequestException(`Available`);
     }
     const newFavorite = await this.prisma.favorite.create({
       data: { userId: userId, ...createFavoriteDto },

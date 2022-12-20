@@ -33,7 +33,6 @@ export class FavoriteController {
       );
       return response.status(HttpStatus.OK).send(newFavorite);
     } catch (error) {
-      console.log(error);
       if (error.status === 409) {
         throw new ConflictException(`Available`);
       }

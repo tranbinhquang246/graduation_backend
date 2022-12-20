@@ -35,8 +35,4 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsString()
   brand: string;
-
-  @IsNotEmpty()
-  @IsString()
-  mainImg: string;
 }
