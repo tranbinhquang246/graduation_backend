@@ -1,28 +1,25 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { response } from 'express';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class SubImageService {
-  create(subImgs: Array<Express.Multer.File>) {
-    console.log(subImgs);
-    return response.status(HttpStatus.OK).send('Hello');
+  constructor(private prisma: PrismaService) {}
 
-    // return 'This action adds a new subImage';
+  async create(subImgs: Array<Express.Multer.File>, productId: number) {
+    const data = [];
+    for (let index = 0; index < subImgs.length; index++) {
+      data.push({
+        productId: productId,
+        link: `${process.env.URL_PICTURE_SUBIMAGE}${subImgs[index].filename}`,
+      });
+    }
+    const createSubImages = await this.prisma.subImage.createMany({
+      data: data,
+    });
+    return createSubImages;
   }
 
-  findAll() {
-    return `This action returns all subImage`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} subImage`;
-  }
-
-  update(id: number) {
-    return `This action updates a #${id} subImage`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} subImage`;
+  async remove(id: number) {
+    return await this.prisma.subImage.delete({ where: { id: id } });
   }
 }

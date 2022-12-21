@@ -16,13 +16,16 @@ export class ProductsService {
   }
 
   async findAll(): Promise<Products[]> {
-    const findAll = await this.prisma.products.findMany();
+    const findAll = await this.prisma.products.findMany({
+      include: { subImg: true },
+    });
     return findAll;
   }
 
   async findOne(id: number): Promise<Products> {
     const findProduct = await this.prisma.products.findUnique({
       where: { id: id },
+      include: { subImg: true },
     });
     return findProduct;
   }

@@ -22,7 +22,9 @@ export class EvaluationService {
       where: { userId: userId, productId: createEvaluationDto.productId },
     });
     if (findEvaluation.length !== 0) {
-      return response.status(HttpStatus.BAD_REQUEST).send(findEvaluation);
+      return response
+        .status(HttpStatus.BAD_REQUEST)
+        .send({ data: findEvaluation, message: 'Evaluation available' });
     }
     const newEvaluation = await this.prisma.evaluation.create({
       data: {

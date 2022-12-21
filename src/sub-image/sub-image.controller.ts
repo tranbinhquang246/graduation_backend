@@ -10,6 +10,8 @@ import {
   UploadedFiles,
   HttpStatus,
   Res,
+  Req,
+  BadRequestException,
 } from '@nestjs/common';
 import { SubImageService } from './sub-image.service';
 import { diskStorage } from 'multer';
@@ -17,6 +19,7 @@ import { extname } from 'path';
 import { Auth } from 'src/auth/auth.decorator';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Role } from 'src/auth/roles/role.enum';
+import fs = require('fs');
 
 const multerOptions = {
   storage: diskStorage({
@@ -43,34 +46,41 @@ export class SubImageController {
   @Auth(Role.Admin)
   @Post()
   @UseInterceptors(FilesInterceptor('subImgs[]', 10, multerOptions))
-  create(
+  async create(
     @UploadedFiles() subImgs: Array<Express.Multer.File>,
+    @Body() productId: number,
     @Res() response,
   ) {
-    return this.subImageService.create(subImgs);
+    try {
+      const createSubImgs = await this.subImageService.create(
+        subImgs,
+        +productId['productId'],
+      );
+      return response.status(HttpStatus.OK).send({ data: createSubImgs });
+    } catch (error) {
+      if (error.code === 'P2003') {
+        throw new BadRequestException(`No product found`);
+      }
+      throw new BadRequestException(`Request Failed`);
+    }
   }
-
   @Auth(Role.Admin)
-  @Get()
-  findAll() {
-    return this.subImageService.findAll();
-  }
-
-  @Auth(Role.Admin)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.subImageService.findOne(+id);
-  }
-
-  @Auth(Role.Admin)
-  @Patch(':id')
-  update(@Param('id') id: string) {
-    return this.subImageService.update(+id);
-  }
-
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.subImageService.remove(+id);
+  async remove(@Param('id') id: string) {
+    try {
+      const removeSubImage = await this.subImageService.remove(+id);
+      const linkRemove = await removeSubImage.link;
+      fs.unlinkSync(`uploads/${linkRemove.slice(22)}`);
+      return removeSubImage;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new BadRequestException(error.meta.cause);
+      }
+      if (error.code === 'ENOENT') {
+        return { message: 'success' };
+      }
+      throw new BadRequestException('Request Failed');
+    }
   }
 }
 
