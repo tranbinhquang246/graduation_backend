@@ -16,6 +16,7 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { Auth } from 'src/auth/auth.decorator';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { Role } from 'src/auth/roles/role.enum';
 
 const multerOptions = {
   storage: diskStorage({
@@ -39,29 +40,29 @@ const multerOptions = {
 export class SubImageController {
   constructor(private readonly subImageService: SubImageService) {}
 
-  //   @Auth()
+  @Auth(Role.Admin)
   @Post()
   @UseInterceptors(FilesInterceptor('subImgs[]', 10, multerOptions))
   create(
     @UploadedFiles() subImgs: Array<Express.Multer.File>,
     @Res() response,
   ) {
-    console.log(subImgs);
-    return response.status(HttpStatus.OK).send('Hello');
-
-    // return this.subImageService.create(createSubImageDto);
+    return this.subImageService.create(subImgs);
   }
 
+  @Auth(Role.Admin)
   @Get()
   findAll() {
     return this.subImageService.findAll();
   }
 
+  @Auth(Role.Admin)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.subImageService.findOne(+id);
   }
 
+  @Auth(Role.Admin)
   @Patch(':id')
   update(@Param('id') id: string) {
     return this.subImageService.update(+id);

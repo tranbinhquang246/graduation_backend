@@ -1,9 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { response } from 'express';
 
 @Injectable()
 export class SubImageService {
-  create() {
-    return 'This action adds a new subImage';
+  create(subImgs: Array<Express.Multer.File>) {
+    console.log(subImgs);
+    return response.status(HttpStatus.OK).send('Hello');
+
+    // return 'This action adds a new subImage';
   }
 
   findAll() {
