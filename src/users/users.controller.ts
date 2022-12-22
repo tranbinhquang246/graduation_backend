@@ -13,6 +13,7 @@ import { Role } from 'src/auth/roles/role.enum';
 import { UserDto } from './dto/user.dto';
 import { User } from './users.decorator';
 import { UsersService } from './users.service';
+import fs = require('fs');
 
 @Controller('user')
 export class UsersController {
@@ -83,9 +84,17 @@ export class UsersController {
     }
     try {
       const deletedUser = await this.usersService.deleteUser(userID);
+      const linkRemove = deletedUser.userInfor.avatar;
+      fs.unlinkSync(`uploads/${linkRemove.slice(22)}`);
       return response.status(HttpStatus.OK).send(deletedUser);
     } catch (error) {
-      throw new BadRequestException(`Request Failed`);
+      if (error.code === 'P2025') {
+        throw new BadRequestException(error.meta.cause);
+      }
+      if (error.code === 'ENOENT') {
+        return response.status(HttpStatus.OK).send({ message: 'Success' });
+      }
+      throw new BadRequestException('Request Failed');
     }
   }
 }

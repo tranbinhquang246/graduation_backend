@@ -14,7 +14,21 @@ export class UserInforService {
     return findUserInfor;
   }
 
-  async update(id: string, updateUserInforDto: UpdateUserInforDto) {
+  async update(
+    id: string,
+    updateUserInforDto: UpdateUserInforDto,
+    avatar: Express.Multer.File,
+  ) {
+    if (avatar) {
+      const updateUserInfor = await this.prisma.user_Infor.update({
+        where: { userId: id },
+        data: {
+          ...updateUserInforDto,
+          avatar: `${process.env.URL_PICTURE_AVATAR}${avatar.filename}`,
+        },
+      });
+      return updateUserInfor;
+    }
     const updateUserInfor = await this.prisma.user_Infor.update({
       where: { userId: id },
       data: updateUserInforDto,

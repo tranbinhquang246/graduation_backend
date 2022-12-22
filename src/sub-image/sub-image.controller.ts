@@ -1,16 +1,13 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UseInterceptors,
   UploadedFiles,
   HttpStatus,
   Res,
-  Req,
   BadRequestException,
 } from '@nestjs/common';
 import { SubImageService } from './sub-image.service';
@@ -66,10 +63,10 @@ export class SubImageController {
   }
   @Auth(Role.Admin)
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string, @Res() response) {
     try {
       const removeSubImage = await this.subImageService.remove(+id);
-      const linkRemove = await removeSubImage.link;
+      const linkRemove = removeSubImage.link;
       fs.unlinkSync(`uploads/${linkRemove.slice(22)}`);
       return removeSubImage;
     } catch (error) {
@@ -77,7 +74,7 @@ export class SubImageController {
         throw new BadRequestException(error.meta.cause);
       }
       if (error.code === 'ENOENT') {
-        return { message: 'success' };
+        return response.status(HttpStatus.OK).send({ message: 'Success' });
       }
       throw new BadRequestException('Request Failed');
     }

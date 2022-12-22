@@ -82,6 +82,7 @@ export class UsersService {
       where: {
         id: id,
       },
+      include: { userInfor: true },
     });
     return deleteUser;
   }

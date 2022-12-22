@@ -30,6 +30,7 @@ model Products {
   descriptions	String?
   quantity		Int
   price			Int
+  salePrice		Int
   color			String
   material		String
   design		String

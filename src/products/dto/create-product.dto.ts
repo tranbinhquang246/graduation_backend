@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateProductDto {
@@ -10,11 +11,18 @@ export class CreateProductDto {
 
   @IsInt()
   @IsNotEmpty()
+  @Transform(({ value }) => Number.parseInt(value))
   quantity: number;
 
   @IsInt()
   @IsNotEmpty()
+  @Transform(({ value }) => Number.parseInt(value))
   price: number;
+
+  @IsInt()
+  @IsNotEmpty()
+  @Transform(({ value }) => Number.parseInt(value))
+  salePrice: number;
 
   @IsNotEmpty()
   @IsString()
