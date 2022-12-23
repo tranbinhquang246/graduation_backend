@@ -11,6 +11,8 @@ import { FavoriteModule } from './favorite/favorite.module';
 import { SubImageModule } from './sub-image/sub-image.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { CartModule } from './cart/cart.module';
+import { CartDetailModule } from './cart-detail/cart-detail.module';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { join } from 'path';
     EvaluationModule,
     FavoriteModule,
     SubImageModule,
+    CartModule,
+    CartDetailModule,
   ],
   providers: [],
 })

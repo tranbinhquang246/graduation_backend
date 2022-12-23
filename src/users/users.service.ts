@@ -28,6 +28,9 @@ export class UsersService {
       await this.prisma.user_Infor.create({
         data: { userId: newUser.id },
       });
+      await this.prisma.cart.create({
+        data: { userId: newUser.id },
+      });
       return response.status(HttpStatus.OK).send(newUser);
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
