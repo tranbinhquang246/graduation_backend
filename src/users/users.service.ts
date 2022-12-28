@@ -15,7 +15,7 @@ import { UserDto } from './dto/user.dto';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async createUser(data: AuthDto, @Res() response) {
+  async createUser(data: AuthDto) {
     const hashPassword = await argon2.hash(data.password);
     try {
       const newUser = await this.prisma.users.create({
@@ -31,7 +31,7 @@ export class UsersService {
       await this.prisma.cart.create({
         data: { userId: newUser.id },
       });
-      return response.status(HttpStatus.OK).send(newUser);
+      return newUser;
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2002') {
@@ -81,6 +81,9 @@ export class UsersService {
   }
 
   async deleteUser(id: string) {
+    if (id === 'anonymous') {
+      throw new BadRequestException(`Request Failed`);
+    }
     const deleteUser = await this.prisma.users.delete({
       where: {
         id: id,

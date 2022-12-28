@@ -13,6 +13,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { CartModule } from './cart/cart.module';
 import { CartDetailModule } from './cart-detail/cart-detail.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { CartDetailModule } from './cart-detail/cart-detail.module';
     SubImageModule,
     CartModule,
     CartDetailModule,
+    OrdersModule,
   ],
   providers: [],
 })

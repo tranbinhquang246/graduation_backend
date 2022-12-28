@@ -12,11 +12,14 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() dto: AuthDto) {
-    return this.authService.login(dto);
+    return await this.authService.login(dto);
   }
 
   @Post('register')
-  async register(@Body() dto: AuthDto, @Res() response) {
-    return this.usersService.createUser(dto, response);
+  async register(@Body() dto: AuthDto) {
+    const registerSuccess = await this.usersService.createUser(dto);
+    if (registerSuccess) {
+      return this.authService.login(dto);
+    }
   }
 }
