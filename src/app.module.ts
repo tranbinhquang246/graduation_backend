@@ -14,6 +14,7 @@ import { join } from 'path';
 import { CartModule } from './cart/cart.module';
 import { CartDetailModule } from './cart-detail/cart-detail.module';
 import { OrdersModule } from './orders/orders.module';
+import { LookupDataModule } from './lookup-data/lookup-data.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { OrdersModule } from './orders/orders.module';
     CartModule,
     CartDetailModule,
     OrdersModule,
+    LookupDataModule,
   ],
   providers: [],
 })

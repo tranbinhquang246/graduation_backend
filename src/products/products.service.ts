@@ -3,6 +3,7 @@ import { Products } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { FillterProductDTO } from './dto/fillter-products.dto';
 
 @Injectable()
 export class ProductsService {
@@ -25,17 +26,66 @@ export class ProductsService {
     return newProducts;
   }
 
-  async findAll(): Promise<Products[]> {
-    const findAll = await this.prisma.products.findMany({
-      include: { subImg: true },
+  async findAll(
+    fillterProductDTO: FillterProductDTO,
+  ): Promise<{ data: Products[] }> {
+    const findProduct = await this.prisma.products.findMany({
+      where: {
+        AND: [
+          fillterProductDTO.type ? { type: fillterProductDTO.type } : {},
+          fillterProductDTO.brand ? { brand: fillterProductDTO.brand } : {},
+          fillterProductDTO.color ? { color: fillterProductDTO.color } : {},
+          fillterProductDTO.design ? { design: fillterProductDTO.design } : {},
+          fillterProductDTO.material
+            ? { material: fillterProductDTO.material }
+            : {},
+          fillterProductDTO.searchWord
+            ? {
+                name: {
+                  contains: fillterProductDTO.searchWord,
+                },
+              }
+            : {},
+        ],
+      },
+      skip: (fillterProductDTO.page - 1) * fillterProductDTO.limit || 0,
+      take: fillterProductDTO.limit * 1 || 6,
     });
-    return findAll;
+    const productsCount = await this.prisma.products.findMany({
+      where: {
+        AND: [
+          fillterProductDTO.type ? { type: fillterProductDTO.type } : {},
+          fillterProductDTO.brand ? { brand: fillterProductDTO.brand } : {},
+          fillterProductDTO.color ? { color: fillterProductDTO.color } : {},
+          fillterProductDTO.design ? { design: fillterProductDTO.design } : {},
+          fillterProductDTO.material
+            ? { material: fillterProductDTO.material }
+            : {},
+          fillterProductDTO.searchWord
+            ? {
+                name: {
+                  contains: fillterProductDTO.searchWord,
+                },
+              }
+            : {},
+        ],
+      },
+    });
+    const totalPage = await Math.ceil(
+      productsCount.length / fillterProductDTO.limit,
+    );
+    const data = {
+      data: findProduct,
+      currentPage: fillterProductDTO.page * 1 || 1,
+      totalPage: totalPage,
+    };
+    return data;
   }
 
   async findOne(id: number): Promise<Products> {
     const findProduct = await this.prisma.products.findUnique({
       where: { id: id },
-      include: { subImg: true },
+      include: { subImg: true, evaluation: true },
     });
     return findProduct;
   }

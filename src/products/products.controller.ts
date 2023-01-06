@@ -12,6 +12,7 @@ import {
   BadRequestException,
   UseInterceptors,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -22,6 +23,7 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { FileInterceptor } from '@nestjs/platform-express';
 import fs = require('fs');
+import { FillterProductDTO } from './dto/fillter-products.dto';
 
 const multerOptions = {
   storage: diskStorage({
@@ -71,9 +73,12 @@ export class ProductsController {
   }
 
   @Get('all')
-  async findAll(@Res() response) {
+  async findAll(
+    @Query() fillterProductDTO: FillterProductDTO,
+    @Res() response,
+  ) {
     try {
-      const findAll = await this.productsService.findAll();
+      const findAll = await this.productsService.findAll(fillterProductDTO);
       return response.status(HttpStatus.OK).send(findAll);
     } catch (error) {
       throw new NotFoundException(`No product found`);

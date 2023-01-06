@@ -58,7 +58,14 @@ export class UsersService {
   async findUserwithID(id: string): Promise<Users> {
     const findUser = await this.prisma.users.findUnique({
       where: { id: id },
-      include: { userInfor: true },
+      include: {
+        userInfor: true,
+        Cart: {
+          include: {
+            cartDetail: true,
+          },
+        },
+      },
     });
     return findUser;
   }

@@ -14,14 +14,14 @@ export class CartDetailService {
     return newCartDetail;
   }
 
-  //   async findOne(id: number) {
-  //     const findOne = await this.prisma.cartDetail.findMany({
-  //       where: {
-  //         id: id,
-  //       },
-  //     });
-  //     return findOne;
-  //   }
+  async count(cartId: number) {
+    const findOne = await this.prisma.cartDetail.findMany({
+      where: {
+        cartId: cartId,
+      },
+    });
+    return findOne;
+  }
 
   async update(id: number, updateCartDetailDto: UpdateCartDetailDto) {
     const updateCartDetail = await this.prisma.cartDetail.update({

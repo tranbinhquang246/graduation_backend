@@ -73,11 +73,11 @@ export class CartDetailController {
       throw new BadRequestException(`Request Failed`);
     }
   }
-  //   @Auth()
-  //   @Get(':id')
-  //   findOne(@Param('id') id: string) {
-  //     return this.cartDetailService.findOne(+id);
-  //   }
+  @Auth()
+  @Get(':cartId')
+  findOne(@Param('cartId') cartId: string) {
+    return this.cartDetailService.count(+cartId);
+  }
   @Auth()
   @Patch(':id')
   async update(
