@@ -1,11 +1,11 @@
 # compiled output
 /dist
 /node_modules
-/avatar
-/bannerAds
-/collections
-/mainImages
-/subImages
+/uploads/avatar/*
+/uploads/bannerAds/*
+/uploads/collections/*
+/uploads/mainImages/*
+/uploads/subImages/*
 
 # Logs
 logs
