@@ -84,6 +84,26 @@ export class ProductsController {
       throw new NotFoundException(`No product found`);
     }
   }
+  @Get('newest')
+  async getNewestProducts(@Res() response) {
+    try {
+      const newestProducts = await this.productsService.getNewestProducts();
+      return response.status(HttpStatus.OK).send(newestProducts);
+    } catch (error) {
+      throw new Error('Error');
+    }
+  }
+
+  @Get('sale')
+  async getSaleProducts(@Res() response) {
+    try {
+      const saleProducts = await this.productsService.getSaleProducts();
+      return response.status(HttpStatus.OK).send(saleProducts);
+    } catch (error) {
+      console.log(error);
+      throw new Error('Error');
+    }
+  }
 
   @Get(':id')
   async findOne(@Param('id') id: string, @Res() response) {

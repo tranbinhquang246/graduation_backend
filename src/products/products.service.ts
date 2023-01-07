@@ -50,6 +50,9 @@ export class ProductsService {
       },
       skip: (fillterProductDTO.page - 1) * fillterProductDTO.limit || 0,
       take: fillterProductDTO.limit * 1 || 6,
+      orderBy: {
+        updatedAt: 'desc',
+      },
     });
     const productsCount = await this.prisma.products.findMany({
       where: {
@@ -88,6 +91,25 @@ export class ProductsService {
       include: { subImg: true, evaluation: true },
     });
     return findProduct;
+  }
+
+  async getNewestProducts(): Promise<Products[]> {
+    const newestProducts = await this.prisma.products.findMany({
+      take: 8,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    return newestProducts;
+  }
+
+  async getSaleProducts(): Promise<any> {
+    const saleProducts = await this.prisma.$queryRaw`
+  SELECT TOP 8 *
+  FROM Products
+  WHERE salePrice < price
+`;
+    return saleProducts;
   }
 
   async update(
