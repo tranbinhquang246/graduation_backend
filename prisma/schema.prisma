@@ -163,3 +163,16 @@ model LookupColor {
   createdAt			DateTime		@default(now()) @map("create_at")
   updatedAt			DateTime		@updatedAt @map("update_at")
 }
+
+model CollectionImage {
+	id				Int				@id @default(autoincrement())
+	title			String
+	link			String
+}
+
+model BannerAds {
+	id 				Int				@id @default(autoincrement())
+	content			String
+	link			String
+	url				String
+}

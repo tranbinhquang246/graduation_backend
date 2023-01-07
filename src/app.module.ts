@@ -15,6 +15,8 @@ import { CartModule } from './cart/cart.module';
 import { CartDetailModule } from './cart-detail/cart-detail.module';
 import { OrdersModule } from './orders/orders.module';
 import { LookupDataModule } from './lookup-data/lookup-data.module';
+import { CollectionImagesModule } from './collection-images/collection-images.module';
+import { BannerAdsModule } from './banner-ads/banner-ads.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { LookupDataModule } from './lookup-data/lookup-data.module';
     CartDetailModule,
     OrdersModule,
     LookupDataModule,
+    CollectionImagesModule,
+    BannerAdsModule,
   ],
   providers: [],
 })

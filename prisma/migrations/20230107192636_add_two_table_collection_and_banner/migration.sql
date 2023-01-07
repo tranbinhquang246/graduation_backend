@@ -1,0 +1,33 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- CreateTable
+CREATE TABLE [dbo].[CollectionImage] (
+    [id] INT NOT NULL IDENTITY(1,1),
+    [title] NVARCHAR(1000) NOT NULL,
+    [link] NVARCHAR(1000) NOT NULL,
+    CONSTRAINT [CollectionImage_pkey] PRIMARY KEY CLUSTERED ([id])
+);
+
+-- CreateTable
+CREATE TABLE [dbo].[BannerAds] (
+    [id] INT NOT NULL IDENTITY(1,1),
+    [content] NVARCHAR(1000) NOT NULL,
+    [link] NVARCHAR(1000) NOT NULL,
+    [url] NVARCHAR(1000) NOT NULL,
+    CONSTRAINT [BannerAds_pkey] PRIMARY KEY CLUSTERED ([id])
+);
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH
