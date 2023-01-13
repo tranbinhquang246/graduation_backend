@@ -51,7 +51,7 @@ export class ProductsService {
       skip: (fillterProductDTO.page - 1) * fillterProductDTO.limit || 0,
       take: fillterProductDTO.limit * 1 || 6,
       orderBy: {
-        updatedAt: 'desc',
+        createdAt: 'desc',
       },
     });
     const productsCount = await this.prisma.products.findMany({
@@ -110,6 +110,13 @@ export class ProductsService {
   WHERE salePrice < price
 `;
     return saleProducts;
+  }
+  async updateQuantity(id: number, quantity: number) {
+    const updateQuantity = await this.prisma.products.update({
+      where: { id: id },
+      data: { quantity: quantity },
+    });
+    return updateQuantity;
   }
 
   async update(

@@ -3,6 +3,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsPositive,
   IsString,
   MaxLength,
   Min,
@@ -16,11 +17,13 @@ export class FillterProductDTO {
   @Transform(({ value }) => Number.parseInt(value))
   @IsNumber()
   @Min(1)
+  @IsPositive()
   page: number;
 
   @Transform(({ value }) => Number.parseInt(value))
   @IsNumber()
   @Min(1)
+  @IsPositive()
   limit: number;
 
   @IsString()
