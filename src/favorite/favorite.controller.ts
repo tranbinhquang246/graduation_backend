@@ -40,6 +40,24 @@ export class FavoriteController {
     }
   }
 
+  @Auth()
+  @Get('check/:productId')
+  async findFavorite(
+    @Param('productId') id: string,
+    @User('id') userId: string,
+    @Res() response,
+  ) {
+    try {
+      const isFavorite = await this.favoriteService.findFavorite(userId, +id);
+      if (isFavorite) {
+        return response.status(HttpStatus.OK).send({ status: true });
+      }
+      return response.status(HttpStatus.OK).send({ status: false });
+    } catch (error) {
+      throw new BadRequestException(`Request Failed`);
+    }
+  }
+
   @Get(':productId')
   async findAll(@Param('productId') id: string, @Res() response) {
     try {

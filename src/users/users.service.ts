@@ -65,6 +65,12 @@ export class UsersService {
             cartDetail: true,
           },
         },
+        addressDeliverys: true,
+        favorites: {
+          include: {
+            product: true,
+          },
+        },
       },
     });
     return findUser;

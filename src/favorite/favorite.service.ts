@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateFavoriteDto } from './dto/create-favorite.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { find } from 'rxjs';
 
 @Injectable()
 export class FavoriteService {
@@ -19,6 +20,12 @@ export class FavoriteService {
     return newFavorite;
   }
 
+  async findFavorite(userId: string, productId: number) {
+    const findFavorite = await this.prisma.favorite.count({
+      where: { productId: productId, userId: userId },
+    });
+    return findFavorite;
+  }
   async findAll(productId: number) {
     const productIdWithCount = await this.prisma.favorite.count({
       where: { productId: productId },
