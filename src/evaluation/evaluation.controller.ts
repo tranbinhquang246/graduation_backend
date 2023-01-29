@@ -40,7 +40,6 @@ export class EvaluationController {
     }
   }
 
-  @Auth()
   @Get('all/:productId')
   async findAll(@Param('productId') productId: string, @Res() response) {
     try {
@@ -52,10 +51,17 @@ export class EvaluationController {
   }
 
   @Auth()
-  @Get(':id')
-  async findOne(@Param('id') id: string, @Res() response) {
+  @Get(':productId')
+  async findOne(
+    @Param('productId') productId: string,
+    @User('id') id: string,
+    @Res() response,
+  ) {
     try {
-      const findEvaluation = await this.evaluationService.findOne(+id);
+      const findEvaluation = await this.evaluationService.findOne(
+        +productId,
+        id,
+      );
       return response.status(HttpStatus.OK).send(findEvaluation);
     } catch (error) {
       throw new NotFoundException(`No evaluation found`);

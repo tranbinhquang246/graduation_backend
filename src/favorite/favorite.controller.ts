@@ -9,6 +9,7 @@ import {
   HttpStatus,
   BadRequestException,
   ConflictException,
+  NotFoundException,
 } from '@nestjs/common';
 import { FavoriteService } from './favorite.service';
 import { CreateFavoriteDto } from './dto/create-favorite.dto';
@@ -65,6 +66,16 @@ export class FavoriteController {
       return response.status(HttpStatus.OK).send({ total: countFavorite });
     } catch (error) {
       throw new BadRequestException(`Request Failed`);
+    }
+  }
+  @Auth()
+  @Get('all')
+  async findAllwithUserId(@Res() response, @User('id') id: string) {
+    try {
+      const allAddress = await this.favoriteService.findAllwithUserId(id);
+      return response.status(HttpStatus.OK).send(allAddress);
+    } catch (error) {
+      throw new NotFoundException(`Request Failed`);
     }
   }
 

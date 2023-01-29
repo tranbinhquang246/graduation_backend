@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  ConflictException,
   HttpStatus,
   Injectable,
   Res,
@@ -41,13 +40,23 @@ export class EvaluationService {
       where: {
         productId: productId,
       },
+      include: {
+        user: {
+          include: {
+            userInfor: true,
+          },
+        },
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
     });
     return findAll;
   }
 
-  async findOne(id: number) {
-    const findEvaluation = await this.prisma.evaluation.findUnique({
-      where: { id: id },
+  async findOne(productId: number, userId: string) {
+    const findEvaluation = await this.prisma.evaluation.findMany({
+      where: { productId: productId, userId: userId },
     });
     return findEvaluation;
   }
@@ -69,7 +78,6 @@ export class EvaluationService {
     const updateEvaluation = await this.prisma.evaluation.update({
       where: { id: id },
       data: {
-        rating: updateEvaluationDto.rating,
         comment: updateEvaluationDto.comment,
       },
     });

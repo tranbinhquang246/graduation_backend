@@ -32,6 +32,12 @@ export class FavoriteService {
     });
     return productIdWithCount;
   }
+  async findAllwithUserId(userId: string) {
+    const findAllwithUserId = await this.prisma.favorite.findMany({
+      where: { userId: userId },
+    });
+    return findAllwithUserId;
+  }
 
   async remove(productId: number, userId: string) {
     return await this.prisma.favorite.deleteMany({
