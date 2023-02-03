@@ -35,6 +35,7 @@ export class FavoriteService {
   async findAllwithUserId(userId: string) {
     const findAllwithUserId = await this.prisma.favorite.findMany({
       where: { userId: userId },
+      include: { product: true },
     });
     return findAllwithUserId;
   }

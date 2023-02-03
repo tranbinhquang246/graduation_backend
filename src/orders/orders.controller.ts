@@ -37,8 +37,9 @@ export class OrdersController {
 
   @Auth()
   @Get()
-  findOne(@User('id') userId: string, @Res() response) {
-    return this.ordersService.findOne(userId);
+  async findAll(@User('id') userId: string, @Res() response) {
+    const order = await this.ordersService.findAll(userId);
+    return response.status(HttpStatus.OK).send(order);
   }
 
   @Patch(':id')

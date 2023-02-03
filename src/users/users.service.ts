@@ -84,11 +84,12 @@ export class UsersService {
   }
 
   async editUser(id: string, dto: UserDto): Promise<Users> {
+    const hashPassword = await argon2.hash(dto.password);
     const updateUser = await this.prisma.users.update({
       where: {
         id: id,
       },
-      data: dto,
+      data: { password: hashPassword },
     });
     return updateUser;
   }

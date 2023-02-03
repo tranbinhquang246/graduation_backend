@@ -14,6 +14,7 @@ import { UserDto } from './dto/user.dto';
 import { User } from './users.decorator';
 import { UsersService } from './users.service';
 import fs = require('fs');
+import * as argon2 from 'argon2';
 
 @Controller('user')
 export class UsersController {
@@ -62,10 +63,17 @@ export class UsersController {
       throw new BadRequestException(`Request Failed. Not have access`);
     }
     try {
-      const editedUser = await this.usersService.editUser(userID, dto);
-      return response.status(HttpStatus.OK).send(editedUser);
+      const user = await this.usersService.findUserwithID(id);
+      if (user && (await argon2.verify(user.password, dto.oldPassword))) {
+        const editedUser = await this.usersService.editUser(userID, dto);
+        return response.status(HttpStatus.OK).send(editedUser);
+      }
+      throw new BadRequestException(`Current password is not correct`);
     } catch (error) {
-      throw new BadRequestException(`Request Failed`);
+      console.log(error);
+      throw new BadRequestException(
+        error?.response?.message || 'Request Failed',
+      );
     }
   }
 
@@ -85,7 +93,9 @@ export class UsersController {
     try {
       const deletedUser = await this.usersService.deleteUser(userID);
       const linkRemove = deletedUser.userInfor.avatar;
-      fs.unlinkSync(`uploads/${linkRemove.slice(22)}`);
+      if (linkRemove) {
+        fs.unlinkSync(`uploads/${linkRemove.slice(22)}`);
+      }
       return response.status(HttpStatus.OK).send(deletedUser);
     } catch (error) {
       if (error.code === 'P2025') {
@@ -94,6 +104,7 @@ export class UsersController {
       if (error.code === 'ENOENT') {
         return response.status(HttpStatus.OK).send({ message: 'Success' });
       }
+      console.log(error);
       throw new BadRequestException('Request Failed');
     }
   }

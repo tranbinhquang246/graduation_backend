@@ -39,4 +39,11 @@ export class CartDetailService {
     });
     return removeCartDetail;
   }
+
+  async removeAll(cartId: number) {
+    const removeCartDetail = await this.prisma.cartDetail.deleteMany({
+      where: { cartId: cartId },
+    });
+    return removeCartDetail;
+  }
 }

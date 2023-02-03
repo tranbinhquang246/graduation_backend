@@ -1,3 +1,3 @@
 export class UpdateOrderDto {
-  statusOrder: 'waiting' | 'confirmed' | 'dilivery' | 'dilivered';
+  statusOrder: 'waiting' | 'confirmed' | 'delivery' | 'delivered';
 }

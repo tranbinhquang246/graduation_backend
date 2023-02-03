@@ -59,15 +59,6 @@ export class FavoriteController {
     }
   }
 
-  @Get(':productId')
-  async findAll(@Param('productId') id: string, @Res() response) {
-    try {
-      const countFavorite = await this.favoriteService.findAll(+id);
-      return response.status(HttpStatus.OK).send({ total: countFavorite });
-    } catch (error) {
-      throw new BadRequestException(`Request Failed`);
-    }
-  }
   @Auth()
   @Get('all')
   async findAllwithUserId(@Res() response, @User('id') id: string) {
@@ -75,7 +66,18 @@ export class FavoriteController {
       const allAddress = await this.favoriteService.findAllwithUserId(id);
       return response.status(HttpStatus.OK).send(allAddress);
     } catch (error) {
-      throw new NotFoundException(`Request Failed`);
+      console.log('error');
+      throw new NotFoundException(`Failed`);
+    }
+  }
+
+  @Get(':productId')
+  async findAll(@Param('productId') id: string, @Res() response) {
+    try {
+      const countFavorite = await this.favoriteService.findAll(+id);
+      return response.status(HttpStatus.OK).send({ total: countFavorite });
+    } catch (error) {
+      throw new BadRequestException(`Request Failed`);
     }
   }
 

@@ -89,6 +89,7 @@ model Order {
   dateOrder			DateTime	@default(now()) @map("date_order")
   totalOrder		Int
   statusOrder 		String
+  deliveryAddress	String
   orderDetail		OrderDetail[]
 }
 
