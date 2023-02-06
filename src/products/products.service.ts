@@ -26,6 +26,10 @@ export class ProductsService {
     return newProducts;
   }
 
+  async getAllwithoutFiller() {
+    const allProducts = await this.prisma.products.findMany();
+    return allProducts;
+  }
   async findAll(
     fillterProductDTO: FillterProductDTO,
   ): Promise<{ data: Products[] }> {

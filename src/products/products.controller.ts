@@ -72,6 +72,16 @@ export class ProductsController {
     }
   }
 
+  @Auth(Role.Admin)
+  @Get()
+  async findAllwithoutFiller(@Res() response) {
+    try {
+      const findAll = await this.productsService.getAllwithoutFiller();
+      return response.status(HttpStatus.OK).send(findAll);
+    } catch (error) {
+      throw new NotFoundException(`No product found`);
+    }
+  }
   @Get('all')
   async findAll(
     @Query() fillterProductDTO: FillterProductDTO,
