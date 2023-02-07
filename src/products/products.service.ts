@@ -1,13 +1,19 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Products } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { FillterProductDTO } from './dto/fillter-products.dto';
+import { HttpService } from '@nestjs/axios';
+import { FavoriteService } from 'src/favorite/favorite.service';
 
 @Injectable()
 export class ProductsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private httpService: HttpService,
+    private favoriteService: FavoriteService,
+  ) {}
 
   async create(
     createProductDto: CreateProductDto,
@@ -53,7 +59,7 @@ export class ProductsService {
         ],
       },
       skip: (fillterProductDTO.page - 1) * fillterProductDTO.limit || 0,
-      take: fillterProductDTO.limit * 1 || 6,
+      take: fillterProductDTO.limit * 1 || 8,
       orderBy: {
         createdAt: 'desc',
       },
@@ -121,6 +127,46 @@ export class ProductsService {
       data: { quantity: quantity },
     });
     return updateQuantity;
+  }
+
+  async getRecommendation(name: string): Promise<any> {
+    const recommentProduct = await this.httpService
+      .get(`${process.env.URL_RECOMMENDED_SYSTEM}product/${name}`)
+      .toPromise();
+    const nameArray = recommentProduct?.data.map(({ Name }) => Name);
+    const products = await this.prisma.products.findMany({
+      where: {
+        name: {
+          in: nameArray,
+        },
+      },
+    });
+    return products;
+  }
+
+  async getRecommendationFavorite(userId: string): Promise<any> {
+    const favorite = await this.favoriteService.findAllwithUserIdOnlyName(
+      userId,
+    );
+    const productNames = favorite.map((obj) => {
+      return {
+        Name: obj.product.name,
+      };
+    });
+    const recommentProduct = await this.httpService
+      .post(`${process.env.URL_RECOMMENDED_SYSTEM}favorite`, productNames, {
+        headers: { 'Content-Type': 'application/json' },
+      })
+      .toPromise();
+    const nameArray = recommentProduct?.data.map(({ Name }) => Name);
+    const products = await this.prisma.products.findMany({
+      where: {
+        name: {
+          in: nameArray,
+        },
+      },
+    });
+    return products;
   }
 
   async update(

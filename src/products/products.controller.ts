@@ -24,6 +24,7 @@ import { extname } from 'path';
 import { FileInterceptor } from '@nestjs/platform-express';
 import fs = require('fs');
 import { FillterProductDTO } from './dto/fillter-products.dto';
+import { User } from 'src/users/users.decorator';
 
 const multerOptions = {
   storage: diskStorage({
@@ -94,6 +95,28 @@ export class ProductsController {
       throw new NotFoundException(`No product found`);
     }
   }
+
+  @Auth()
+  @Get('recommend-favorite')
+  async getRecommendationFavorite(@Res() response, @User('id') id: string) {
+    try {
+      const findAll = await this.productsService.getRecommendationFavorite(id);
+      return response.status(HttpStatus.OK).send(findAll);
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(`No product found`);
+    }
+  }
+  @Get('recommend/:name')
+  async getRecommendation(@Res() response, @Param('name') name: string) {
+    try {
+      const findAll = await this.productsService.getRecommendation(name);
+      return response.status(HttpStatus.OK).send(findAll);
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(`No product found`);
+    }
+  }
   @Get('newest')
   async getNewestProducts(@Res() response) {
     try {
@@ -110,7 +133,6 @@ export class ProductsController {
       const saleProducts = await this.productsService.getSaleProducts();
       return response.status(HttpStatus.OK).send(saleProducts);
     } catch (error) {
-      console.log(error);
       throw new Error('Error');
     }
   }

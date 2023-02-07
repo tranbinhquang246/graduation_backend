@@ -29,6 +29,18 @@ export class OrdersService {
     await this.cartService.removeAll(createOrderDto.cartId);
     return newOrder;
   }
+  async getAllwithoutFiller() {
+    const allOrder = await this.prisma.order.findMany({
+      include: {
+        orderDetail: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+    return allOrder;
+  }
 
   async findAll(userId: string) {
     const findAll = await this.prisma.order.findMany({

@@ -23,7 +23,6 @@ export class UsersController {
   @Auth(Role.Admin)
   @Get('all')
   async getAll(@Res() response, @User('id') id: string) {
-    console.log(id);
     const findAll = await this.usersService.findAll();
     if (!findAll) {
       throw new NotFoundException(`No users found`);

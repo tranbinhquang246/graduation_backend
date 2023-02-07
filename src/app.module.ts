@@ -17,6 +17,7 @@ import { OrdersModule } from './orders/orders.module';
 import { LookupDataModule } from './lookup-data/lookup-data.module';
 import { CollectionImagesModule } from './collection-images/collection-images.module';
 import { BannerAdsModule } from './banner-ads/banner-ads.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { BannerAdsModule } from './banner-ads/banner-ads.module';
       },
     }),
     ConfigModule.forRoot({ isGlobal: true }),
+    HttpModule,
     AuthModule,
     UsersModule,
     PrismaModule,

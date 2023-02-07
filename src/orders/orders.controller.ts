@@ -9,12 +9,14 @@ import {
   BadRequestException,
   HttpStatus,
   Res,
+  NotFoundException,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { User } from 'src/users/users.decorator';
 import { Auth } from 'src/auth/auth.decorator';
+import { Role } from 'src/auth/roles/role.enum';
 
 @Controller('orders')
 export class OrdersController {
@@ -32,6 +34,17 @@ export class OrdersController {
       return response.status(HttpStatus.OK).send(newOrder);
     } catch (error) {
       throw new BadRequestException(`Request Failed`);
+    }
+  }
+
+  @Auth(Role.Admin)
+  @Get('all')
+  async findAllwithoutFiller(@Res() response) {
+    try {
+      const findAll = await this.ordersService.getAllwithoutFiller();
+      return response.status(HttpStatus.OK).send(findAll);
+    } catch (error) {
+      throw new NotFoundException(`No product found`);
     }
   }
 

@@ -40,6 +40,18 @@ export class FavoriteService {
     return findAllwithUserId;
   }
 
+  async findAllwithUserIdOnlyName(userId: string) {
+    const findAll = await this.prisma.favorite.findMany({
+      where: { userId: userId },
+      include: {
+        product: {
+          select: { name: true },
+        },
+      },
+    });
+    return findAll;
+  }
+
   async remove(productId: number, userId: string) {
     return await this.prisma.favorite.deleteMany({
       where: { productId: productId, userId: userId },
