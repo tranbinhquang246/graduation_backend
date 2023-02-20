@@ -23,7 +23,6 @@ export class UserInforService {
       const updateUserInfor = await this.prisma.user_Infor.update({
         where: { userId: id },
         data: {
-          ...updateUserInforDto,
           avatar: `${process.env.URL_PICTURE_AVATAR}${avatar.filename}`,
         },
       });
