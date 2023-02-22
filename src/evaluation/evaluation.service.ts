@@ -79,6 +79,7 @@ export class EvaluationService {
       where: { id: id },
       data: {
         comment: updateEvaluationDto.comment,
+        rating: updateEvaluationDto.rating,
       },
     });
     return updateEvaluation;

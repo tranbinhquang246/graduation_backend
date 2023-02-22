@@ -16,10 +16,8 @@ export class CreateEvaluationDto {
 
   @IsNotEmpty()
   @IsNumber()
-  @IsInt()
   @Min(0, { message: 'Rating min 0 ' })
   @Max(5, { message: 'Rating max is 5' })
-  @Transform(({ value }) => Number.parseInt(value))
   rating: number;
 
   @IsNotEmpty()

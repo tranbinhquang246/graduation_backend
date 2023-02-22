@@ -69,7 +69,6 @@ export class UsersController {
       }
       throw new BadRequestException(`Current password is not correct`);
     } catch (error) {
-      console.log(error);
       throw new BadRequestException(
         error?.response?.message || 'Request Failed',
       );
@@ -103,7 +102,6 @@ export class UsersController {
       if (error.code === 'ENOENT') {
         return response.status(HttpStatus.OK).send({ message: 'Success' });
       }
-      console.log(error);
       throw new BadRequestException('Request Failed');
     }
   }

@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateProductDto {
   @IsNotEmpty()
@@ -8,6 +8,9 @@ export class CreateProductDto {
 
   @IsString()
   descriptions: string;
+
+  @IsNotEmpty()
+  rating: number;
 
   @IsInt()
   @IsNotEmpty()

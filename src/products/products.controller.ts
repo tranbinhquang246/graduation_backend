@@ -103,7 +103,6 @@ export class ProductsController {
       const findAll = await this.productsService.getRecommendationFavorite(id);
       return response.status(HttpStatus.OK).send(findAll);
     } catch (error) {
-      console.log(error);
       throw new NotFoundException(`No product found`);
     }
   }
@@ -113,7 +112,6 @@ export class ProductsController {
       const findAll = await this.productsService.getRecommendation(name);
       return response.status(HttpStatus.OK).send(findAll);
     } catch (error) {
-      console.log(error);
       throw new NotFoundException(`No product found`);
     }
   }

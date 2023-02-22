@@ -66,7 +66,6 @@ export class FavoriteController {
       const allAddress = await this.favoriteService.findAllwithUserId(id);
       return response.status(HttpStatus.OK).send(allAddress);
     } catch (error) {
-      console.log('error');
       throw new NotFoundException(`Failed`);
     }
   }

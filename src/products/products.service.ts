@@ -22,6 +22,7 @@ export class ProductsService {
     createProductDto.quantity = +createProductDto.quantity;
     createProductDto.price = +createProductDto.price;
     createProductDto.salePrice = +createProductDto.salePrice;
+    createProductDto.rating = +createProductDto.rating;
 
     const newProducts = await this.prisma.products.create({
       data: {
@@ -105,7 +106,7 @@ export class ProductsService {
 
   async getNewestProducts(): Promise<Products[]> {
     const newestProducts = await this.prisma.products.findMany({
-      take: 8,
+      take: 10,
       orderBy: {
         createdAt: 'desc',
       },
@@ -192,6 +193,28 @@ export class ProductsService {
       data: updateProductDto,
     });
     return updateProduct;
+  }
+
+  async getRatingProduct(id: number) {
+    const ratingProduct = await this.prisma.products.findUnique({
+      where: {
+        id: id,
+      },
+      select: {
+        rating: true,
+      },
+    });
+    return ratingProduct;
+  }
+
+  async updateRating(id: number, rating: number) {
+    const updateRatingProduct = await this.prisma.products.update({
+      where: { id: id },
+      data: {
+        rating: rating,
+      },
+    });
+    return updateRatingProduct;
   }
 
   async remove(id: number) {
