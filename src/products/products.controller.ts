@@ -106,6 +106,7 @@ export class ProductsController {
       throw new NotFoundException(`No product found`);
     }
   }
+
   @Get('recommend/:name')
   async getRecommendation(@Res() response, @Param('name') name: string) {
     try {
@@ -142,6 +143,16 @@ export class ProductsController {
       return response.status(HttpStatus.OK).send(findProduct);
     } catch (error) {
       throw new NotFoundException(`Product not found`);
+    }
+  }
+
+  @Get('rating/:id')
+  async getRatingProduct(@Res() response, @Param('id') id: string) {
+    try {
+      const rating = await this.productsService.getRatingProduct(+id);
+      return response.status(HttpStatus.OK).send(rating);
+    } catch (error) {
+      throw new NotFoundException(`No product found`);
     }
   }
 
